@@ -22,7 +22,7 @@ const PurchaseController = {
                 return res.status(400).json({ status: false, message: 'Missing required body parameter: customer-no' });
             }
 
-            const result = await AkrabService.purchase(userId, productId, customerNo);
+            const result = await AkrabService.purchase(keyAccess, userId, productId, customerNo);
 
             return res.json(result);
         } catch (error) {

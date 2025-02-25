@@ -3,7 +3,7 @@ const axios = require('axios');
 const qs = require('qs'); 
 
 const AkrabService = {
-    purchase: async (userId, product_id, customer_no) => {
+    purchase: async (keyAccess, userId, product_id, customer_no) => {
         try {
             const url = `${config.backend}/akrab-otomatis.php`;
 
@@ -12,6 +12,7 @@ const AkrabService = {
                 user_id: userId,
                 customer_no: customer_no,
                 product_id: product_id,
+                key_access: keyAccess
             }), {
                 headers: {
                     "alt-svc": "h3=\":443\"; ma=86400",
@@ -20,7 +21,7 @@ const AkrabService = {
                     "cf-ray": "91797af82ac79cbd-SIN",
                     "content-encoding": "zstd",
                     "content-security-policy": "upgrade-insecure-requests",
-                    "content-type": "application/x-www-form-urlencoded",
+                    "content-type": "text/html; charset=UTF-8",
                     "date": "Tue, 25 Feb 2025 17:40:25 GMT",
                     "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
                     "nel": {

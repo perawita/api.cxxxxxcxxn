@@ -12,7 +12,7 @@ const AkrabService = {
                 user_id: userId,
                 customer_no: customer_no,
                 product_id: product_id,
-            }).toString(), {
+            }), {
                 headers: {
                     "alt-svc": "h3=\":443\"; ma=86400",
                     "cache-control": "no-store, no-cache, must-revalidate",

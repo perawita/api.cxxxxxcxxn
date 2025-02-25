@@ -21,7 +21,7 @@ const AkrabService = {
                     "cf-ray": "91797af82ac79cbd-SIN",
                     "content-encoding": "zstd",
                     "content-security-policy": "upgrade-insecure-requests",
-                    "content-type": "text/html; charset=UTF-8",
+                    "content-type": "application/x-www-form-urlencoded",
                     "date": "Tue, 25 Feb 2025 17:40:25 GMT",
                     "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
                     "nel": {

@@ -34,6 +34,26 @@ module.exports = (req, res, next) => {
             });
         }
 
+        // Periksa apakah API Key sudah expired
+        if (result.expires_at) {
+            const now = new Date();
+            const expiresAt = new Date(result.expires_at);
+
+            // Format ke 'YYYY-MM-DD HH:MM:SS'
+            const formatDate = (date) => {
+                const pad = (num) => String(num).padStart(2, '0');
+                return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
+                       `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+            };
+
+            if (formatDate(expiresAt) < formatDate(now)) {
+                return res.status(403).json({
+                    status: false,
+                    message: 'Forbidden: API Key has expired'
+                });
+            }
+        }
+
         req.user_id = result.user_id;
         next();
     });

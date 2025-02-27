@@ -10,8 +10,8 @@ const AkrabModel = {
     },
 
     create: (data, keyAccess, callback) => {
-        const query = "INSERT INTO akrab (id_produk, nama_paket, harga, stok, Original_Price, sisa_slot, jumlah_slot, slot_terpakai, key_access) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        const values = [data.id_produk, data.nama_paket, data.harga, data.stok, data.Original_Price, data.sisa_slot, data.jumlah_slot, data.slot_terpakai, keyAccess];
+        const query = "INSERT INTO akrab (id_produk, nama_paket, harga, stok, Original_Price, sisa_slot, jumlah_slot, slot_terpakai, key_access, quota_allocated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        const values = [data.id_produk, data.nama_paket, data.harga, data.stok, data.Original_Price, data.sisa_slot, data.jumlah_slot, data.slot_terpakai, keyAccess, data.quota_allocated];
         db.query(query, values, callback);
     },
     update: (id, data, keyAccess, callback) => {
@@ -28,8 +28,8 @@ const AkrabModel = {
                 return callback(null, { status: 403, message: "Forbidden: Invalid key_access" });
             }
     
-            const updateQuery = `UPDATE akrab SET id_produk=?, nama_paket=?, harga=?, stok=?, Original_Price=?, sisa_slot=?, jumlah_slot=?, slot_terpakai=? WHERE id=? AND key_access=?`;
-            const values = [data.id_produk, data.nama_paket, data.harga, data.stok, data.Original_Price, data.sisa_slot, data.jumlah_slot, data.slot_terpakai, id, keyAccess];
+            const updateQuery = `UPDATE akrab SET id_produk=?, nama_paket=?, harga=?, stok=?, Original_Price=?, sisa_slot=?, jumlah_slot=?, slot_terpakai=?, quota_allocated=? WHERE id=? AND key_access=?`;
+            const values = [data.id_produk, data.nama_paket, data.harga, data.stok, data.Original_Price, data.sisa_slot, data.jumlah_slot, data.slot_terpakai, data.quota_allocated, id, keyAccess];
     
             db.query(updateQuery, values, (updateErr, result) => {
                 if (updateErr) return callback(updateErr, null);

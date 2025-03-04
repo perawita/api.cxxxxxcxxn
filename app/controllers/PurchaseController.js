@@ -1,5 +1,7 @@
 const AkrabService = require('../services/AkrabService');
 const AkrabModel = require('../models/AkrabModel');
+const redisClient = require('../config/redis');
+
 
 const PurchaseController = {
     akrabPurchase: async (req, res) => {
@@ -31,6 +33,12 @@ const PurchaseController = {
                 // Lanjutkan ke proses pembelian jika sisa_slot > 0
                 try {
                     const result = await AkrabService.purchase(keyAccess, userId, results[0].id_produk, customerNo);
+                    
+                    if (result.status) {
+                        // Hapus cache Redis setelah transaksi berhasil
+                        await redisClient.del(`akrab:${productId}:${keyAccess}`);
+                    }
+                    
                     return res.json(result);
                 } catch (error) {
                     console.error('Error in purchase process:', error);

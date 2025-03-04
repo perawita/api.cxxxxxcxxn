@@ -6,6 +6,7 @@ module.exports = {
     backend: process.env.API_BACKEND,
     origin: process.env.API_ORIGIN,
     host: process.env.API_HOST,
+    redis: process.env.REDIS_URL,
     db: {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,

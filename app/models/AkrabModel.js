@@ -21,19 +21,22 @@ const AkrabModel = {
     },
 
     getById: async (id, keyAccess, callback) => {
+        id = parseInt(id, 10);
+        if (isNaN(id)) return callback(new Error("Invalid ID format"), null);
+        
         const cacheKey = `akrab:${id}:${keyAccess}`;
-        // const cachedData = await redisClient.get(cacheKey);
+        const cachedData = await redisClient.get(cacheKey);
     
-        // if (cachedData) {
-        //     return callback(null, JSON.parse(cachedData));
-        // }
+        if (cachedData) {
+            return callback(null, JSON.parse(cachedData));
+        }
     
         db.query("SELECT * FROM akrab WHERE id = ? AND key_access = ?", [id, keyAccess], (err, results) => {
             if (err) return callback(err, null);
             
             if (results.length > 0) {
                 // Simpan hasil query ke Redis selama 10 menit
-                // redisClient.setEx(cacheKey, 600, JSON.stringify(results));
+                redisClient.setEx(cacheKey, 600, JSON.stringify(results));
             }
     
             return callback(null, results);

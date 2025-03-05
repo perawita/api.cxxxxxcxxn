@@ -27,7 +27,7 @@ const PurchaseController = {
                 }
                 
                 if (!results.length || results[0].sisa_slot <= 0) {
-                    return res.status(404).json({ status: false, message: 'Data not found' });
+                    return res.status(404).json({ status: false, message: 'Slot is not ready' });
                 }
 
                 // Lanjutkan ke proses pembelian jika sisa_slot > 0

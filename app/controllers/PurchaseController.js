@@ -27,6 +27,8 @@ const PurchaseController = {
                 }
                 
                 if (!results.length || results[0].sisa_slot <= 0) {
+                    // Hapus cache Redis jika slot kosong
+                    await redisClient.del(`akrab:${productId}:${keyAccess}`);
                     return res.status(404).json({ status: false, message: 'Slot is not ready' });
                 }
 

@@ -17,6 +17,7 @@ const PurchaseController = {
                 });
             }
 
+            const cacheKey = `akrab:${productId}:${keyAccess}`;
             let productData = await new Promise((resolve, reject) => {
                 AkrabModel.getById(productId, keyAccess, (err, results) => {
                     if (err) return reject(err);

@@ -4,47 +4,54 @@ const redisClient = require('../config/redis');
 const AkrabModel = {
     getAll: async (keyAccess, callback) => {
         const cacheKey = `akrab_all:${keyAccess}`;
-        const cachedData = await redisClient.get(cacheKey);
-
-        if (cachedData) {
-            return callback(null, JSON.parse(cachedData));
+        
+        try {
+            const cacheExists = await redisClient.exists(cacheKey);
+            if (cacheExists) {
+                const cachedData = await redisClient.get(cacheKey);
+                return callback(null, JSON.parse(cachedData));
+            }
+        } catch (err) {
+            console.error("Redis error:", err);
         }
 
         db.query("SELECT * FROM akrab WHERE key_access = ?", [keyAccess], (err, results) => {
             if (err) return callback(err, null);
 
-            // Simpan hasil query ke Redis selama 10 menit
             redisClient.setEx(cacheKey, 600, JSON.stringify(results));
-
             return callback(null, results);
         });
     },
 
     getById: async (id, keyAccess, columns = "*", callback) => {
-        const cacheKey = `akrab:${id}:${keyAccess}:${columns}`;
-        const cachedData = await redisClient.get(cacheKey);
-    
-        if (cachedData) {
-            return callback(null, JSON.parse(cachedData));
+        const cacheKey = `akrab:${id}:${keyAccess}:${Array.isArray(columns) ? columns.join(",") : columns}`;
+        
+        try {
+            const cacheExists = await redisClient.exists(cacheKey);
+            if (cacheExists) {
+                const cachedData = await redisClient.get(cacheKey);
+                return callback(null, JSON.parse(cachedData));
+            }
+        } catch (err) {
+            console.error("Redis error:", err);
         }
-    
-        if (!Array.isArray(columns)) {
-            return callback(new Error("columns cannot be nulls add array or string '*'."));
+
+        if (!Array.isArray(columns) && columns !== "*") {
+            return callback(new Error("Kolom harus berupa array atau string '*'."), null);
         }
-        const selectColumns = columns.length > 0 ? columns.join(", ") : "*";
-    
+
+        const selectColumns = Array.isArray(columns) && columns.length > 0 ? columns.join(", ") : "*";
+
         db.query(`SELECT ${selectColumns} FROM akrab WHERE id = ? AND key_access = ?`, [id, keyAccess], (err, results) => {
             if (err) return callback(err, null);
-    
+
             if (results.length > 0) {
-                // Simpan hasil query ke Redis selama 10 menit
                 redisClient.setEx(cacheKey, 600, JSON.stringify(results));
             }
-    
+
             return callback(null, results);
         });
     },
-       
 
     create: (data, keyAccess, callback) => {
         const query = "INSERT INTO akrab (id_produk, nama_paket, harga, stok, Original_Price, sisa_slot, jumlah_slot, slot_terpakai, key_access, quota_allocated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -53,9 +60,7 @@ const AkrabModel = {
         db.query(query, values, (err, result) => {
             if (err) return callback(err, null);
 
-            // Hapus cache agar data baru bisa muncul
             redisClient.del(`akrab_all:${keyAccess}`);
-
             return callback(null, result);
         });
     },
@@ -65,10 +70,7 @@ const AkrabModel = {
 
         db.query(checkQuery, [id], (err, results) => {
             if (err) return callback(err, null);
-
-            if (results.length === 0) {
-                return callback(null, { status: 404, message: "Data not found" });
-            }
+            if (results.length === 0) return callback(null, { status: 404, message: "Data not found" });
 
             if (results[0].key_access !== keyAccess) {
                 return callback(null, { status: 403, message: "Forbidden: Invalid key_access" });
@@ -80,7 +82,7 @@ const AkrabModel = {
             db.query(updateQuery, values, (updateErr, result) => {
                 if (updateErr) return callback(updateErr, null);
 
-                // Hapus cache agar data yang baru diperbarui bisa diambil ulang
+                // Hapus cache jika data berubah
                 redisClient.del(`akrab:${id}:${keyAccess}`);
                 redisClient.del(`akrab_all:${keyAccess}`);
 
@@ -94,10 +96,7 @@ const AkrabModel = {
 
         db.query(checkQuery, [id], (err, results) => {
             if (err) return callback(err, null);
-
-            if (results.length === 0) {
-                return callback(null, { status: 404, message: "Data not found" });
-            }
+            if (results.length === 0) return callback(null, { status: 404, message: "Data not found" });
 
             if (results[0].key_access !== keyAccess) {
                 return callback(null, { status: 403, message: "Forbidden: Invalid key_access" });
@@ -106,7 +105,7 @@ const AkrabModel = {
             db.query("DELETE FROM akrab WHERE id = ? AND key_access = ?", [id, keyAccess], (deleteErr, result) => {
                 if (deleteErr) return callback(deleteErr, null);
 
-                // Hapus cache setelah menghapus data
+                // Hapus cache setelah data dihapus
                 redisClient.del(`akrab:${id}:${keyAccess}`);
                 redisClient.del(`akrab_all:${keyAccess}`);
 

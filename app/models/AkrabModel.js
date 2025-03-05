@@ -21,9 +21,6 @@ const AkrabModel = {
     },
 
     getById: async (id, keyAccess, callback) => {
-        id = parseInt(id, 10);
-        if (isNaN(id)) return callback(new Error("Invalid ID format"), null);
-        
         const cacheKey = `akrab:${id}:${keyAccess}`;
         const cachedData = await redisClient.get(cacheKey);
     

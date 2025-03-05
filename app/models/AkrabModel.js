@@ -34,6 +34,7 @@ const AkrabModel = {
             if (results.length > 0) {
                 // Simpan hasil query ke Redis selama 10 menit
                 redisClient.setEx(cacheKey, 600, JSON.stringify(results));
+                return callback(null, []);
             }
 
             if(results[0].sisa_slot <= 0){

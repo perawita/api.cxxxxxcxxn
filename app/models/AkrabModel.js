@@ -20,17 +20,22 @@ const AkrabModel = {
         });
     },
 
-    getById: async (id, keyAccess, callback) => {
-        const cacheKey = `akrab:${id}:${keyAccess}`;
+    getById: async (id, keyAccess, columns = "*", callback) => {
+        const cacheKey = `akrab:${id}:${keyAccess}:${columns}`;
         const cachedData = await redisClient.get(cacheKey);
     
         if (cachedData) {
             return callback(null, JSON.parse(cachedData));
         }
     
-        db.query("SELECT * FROM akrab WHERE id = ? AND key_access = ?", [id, keyAccess], (err, results) => {
+        if (!Array.isArray(columns)) {
+            return callback(new Error("columns cannot be nulls add array or string '*'."));
+        }
+        const selectColumns = columns.length > 0 ? columns.join(", ") : "*";
+    
+        db.query(`SELECT ${selectColumns} FROM akrab WHERE id = ? AND key_access = ?`, [id, keyAccess], (err, results) => {
             if (err) return callback(err, null);
-            
+    
             if (results.length > 0) {
                 // Simpan hasil query ke Redis selama 10 menit
                 redisClient.setEx(cacheKey, 600, JSON.stringify(results));
@@ -38,7 +43,8 @@ const AkrabModel = {
     
             return callback(null, results);
         });
-    },    
+    },
+       
 
     create: (data, keyAccess, callback) => {
         const query = "INSERT INTO akrab (id_produk, nama_paket, harga, stok, Original_Price, sisa_slot, jumlah_slot, slot_terpakai, key_access, quota_allocated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

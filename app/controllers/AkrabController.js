@@ -12,7 +12,7 @@ const AkrabController = {
     getById: (req, res) => {
         const { id } = req.params;
         const keyAccess = req.headers['x-api-key'];
-        AkrabModel.getById(id, keyAccess, (err, results) => {
+        AkrabModel.getById(id, keyAccess, "*", (err, results) => {
             if (err) return res.status(500).json({ status: false, message: err.message });
             if (!results.length) return res.status(404).json({ status: false, message: 'Data not found' });
             res.json({ status: true, data: results[0] });

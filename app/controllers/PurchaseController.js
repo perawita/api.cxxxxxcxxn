@@ -31,6 +31,7 @@ const PurchaseController = {
             }
 
             if (productData.sisa_slot <= 0) {
+                await redisClient.del(cacheKey);
                 return res.status(404).json({ status: false, message: 'Slot is not ready' });
             }
 

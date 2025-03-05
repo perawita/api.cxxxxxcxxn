@@ -23,17 +23,22 @@ const AkrabModel = {
     getById: async (id, keyAccess, callback) => {
         const cacheKey = `akrab:${id}:${keyAccess}`;
         const cachedData = await redisClient.get(cacheKey);
-
+    
         if (cachedData) {
             return callback(null, JSON.parse(cachedData));
         }
-
-        
-        db.query("SELECT * FROM akrab WHERE id = ? AND key_access = ?", [id, keyAccess], callback);
-        
-        // Simpan hasil query ke Redis selama 10 menit
-        redisClient.setEx(cacheKey, 600, JSON.stringify(results[0]));
-    },
+    
+        db.query("SELECT * FROM akrab WHERE id = ? AND key_access = ?", [id, keyAccess], (err, results) => {
+            if (err) return callback(err, null);
+            
+            if (results.length > 0) {
+                // Simpan hasil query ke Redis selama 10 menit
+                redisClient.setEx(cacheKey, 600, JSON.stringify(results));
+            }
+    
+            return callback(null, results);
+        });
+    },    
 
     create: (data, keyAccess, callback) => {
         const query = "INSERT INTO akrab (id_produk, nama_paket, harga, stok, Original_Price, sisa_slot, jumlah_slot, slot_terpakai, key_access, quota_allocated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

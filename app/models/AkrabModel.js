@@ -30,14 +30,14 @@ const AkrabModel = {
     
         db.query("SELECT * FROM akrab WHERE id = ? AND key_access = ?", [id, keyAccess], (err, results) => {
             if (err) return callback(err, null);
-
-            if(results[0].sisa_slot <= 0){
-                redisClient.del(`akrab:${id}:${keyAccess}`);
-            }
             
             if (results.length > 0) {
                 // Simpan hasil query ke Redis selama 10 menit
                 redisClient.setEx(cacheKey, 600, JSON.stringify(results));
+            }
+
+            if(results[0].sisa_slot <= 0){
+                redisClient.del(`akrab:${id}:${keyAccess}`);
             }
     
             return callback(null, results);

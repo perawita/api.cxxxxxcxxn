@@ -1,18 +1,23 @@
 const ApiKeyModel = require('../models/ApiKeyModel');
 
-module.exports = async (req, res, next) => {
-    try {
-        const apiKey = req.headers['x-api-key'];
-        const userId = req.headers['x-user-id'];
+module.exports = (req, res, next) => {
+    const apiKey = req.headers['x-api-key'];
+    const userId = req.headers['x-user-id'];
 
-        if (!apiKey || !userId) {
-            return res.status(403).json({
+    if (!apiKey || !userId) {
+        return res.status(403).json({
+            status: false,
+            message: 'Forbidden: Missing API Key or User ID'
+        });
+    }
+
+    ApiKeyModel.checkApiKey(apiKey, (err, result) => {
+        if (err) {
+            return res.status(500).json({
                 status: false,
-                message: 'Forbidden: Missing API Key or User ID'
+                message: 'Database error'
             });
         }
-
-        const result = await ApiKeyModel.checkApiKey(apiKey);
 
         if (!result) {
             return res.status(403).json({
@@ -49,13 +54,7 @@ module.exports = async (req, res, next) => {
             }
         }
 
-        // Simpan user_id di `req` untuk akses di middleware selanjutnya
         req.user_id = result.user_id;
         next();
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            message: 'Database error'
-        });
-    }
+    });
 };

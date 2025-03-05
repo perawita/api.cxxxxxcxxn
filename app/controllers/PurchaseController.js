@@ -17,24 +17,13 @@ const PurchaseController = {
                 });
             }
 
-            const cacheKey = `akrab:${productId}:${keyAccess}`;
-            
-            // Cek Redis cache sebelum melakukan query database
-            let productData = await redisClient.get(cacheKey);
-            if (!productData) {
-                productData = await new Promise((resolve, reject) => {
-                    AkrabModel.getById(productId, keyAccess, (err, results) => {
-                        if (err) return reject(err);
-                        resolve(results.length ? results[0] : null);
-                    });
+            let productData = await new Promise((resolve, reject) => {
+                AkrabModel.getById(productId, keyAccess, (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results.length ? results[0] : null);
                 });
+            });
 
-                if (productData) {
-                    await redisClient.setEx(cacheKey, 600, JSON.stringify(productData)); // Simpan di cache 10 menit
-                }
-            } else {
-                productData = JSON.parse(productData);
-            }
 
             if (!productData || productData.sisa_slot <= 0) {
                 return res.status(404).json({ status: false, message: 'Slot is not ready' });

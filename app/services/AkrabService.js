@@ -15,41 +15,12 @@ const AkrabService = {
                 key_access: keyAccess
             }), {
                 headers: {
-                    "alt-svc": "h3=\":443\"; ma=86400",
-                    "cache-control": "no-store, no-cache, must-revalidate",
-                    "cf-cache-status": "DYNAMIC",
-                    "content-encoding": "zstd",
-                    "content-security-policy": "upgrade-insecure-requests",
-                    "content-type": "application/x-www-form-urlencoded",
-                    "Connection": "keep-alive",
-                    "nel": {
-                      "success_fraction": 0,
-                      "report_to": "cf-nel",
-                      "max_age": 604800
-                    },
-                    "panel": "hpanel",
-                    "platform": "hostinger",
-                    "pragma": "no-cache",
-                    "priority": "u=0,i",
-                    "report-to": {
-                      "endpoints": [
-                        {
-                          "url": "https://a.nel.cloudflare.com/report/v4?s=LxHs2ntA3MdpAHmbkTL1rEOlKzNXGSkI7ijyYijrm0p26Ogx%2Fzo9Puk9ycKUYgBVvGOtRL%2BKFPTIGutz1dkIlnCJEqlN7ZU8ixMSeEGK8qC1pCPvIYtepGa2KTV7lLcLtw%3D%3D"
-                        }
-                      ],
-                      "group": "cf-nel",
-                      "max_age": 604800
-                    },
-                    "server": "cloudflare",
-                    "server-timing": [
-                      "cfL4;desc=\"?proto=QUIC&rtt=44842&min_rtt=44387&rtt_var=9811&sent=12&recv=9&lost=0&retrans=0&sent_bytes=4243&recv_bytes=4687&delivery_rate=13111&cwnd=12000&unsent_bytes=0&cid=cbe4f87f90810b9b&ts=96&x=1\"",
-                      "cfExtPri",
-                      "cfHdrFlush;dur=0"
-                    ],
-                    "vary": "Accept-Encoding",
-                    "x-powered-by": "PHP/8.2.27",
-                    "x-turbo-charged-by": "LiteSpeed"
-                  }
+                  "accept": "application/json",
+                  "content-type": "application/x-www-form-urlencoded",
+                  "origin": `${config.origin}`,
+                  "referer": `${url}`,
+                  "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36"
+              }
                   
                 
             });

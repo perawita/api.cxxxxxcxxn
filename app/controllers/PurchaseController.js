@@ -33,9 +33,9 @@ const PurchaseController = {
             // Proses pembelian
             const result = await AkrabService.purchase(keyAccess, userId, productData.id_produk, customerNo);
 
-            if (result.status) {
-                await redisClient.del(cacheKey); // Hapus cache setelah transaksi berhasil
-            }
+            // if (result.status) {
+            //     await redisClient.del(cacheKey); // Hapus cache setelah transaksi berhasil
+            // }
 
             return res.json(result);
         } catch (error) {

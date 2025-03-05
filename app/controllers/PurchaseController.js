@@ -8,7 +8,7 @@ const PurchaseController = {
             // Ambil data dari headers dan body
             const keyAccess = req.headers['x-api-key'];
             const userId = req.headers['x-user-id'];
-            const { productId, customerNo } = req.body; // Gunakan camelCase untuk lebih sesuai dengan JavaScript
+            const { 'product-id': productId, 'customer-no': customerNo } = req.body;
 
             // Validasi input
             if (!keyAccess || !userId || !productId || !customerNo) {

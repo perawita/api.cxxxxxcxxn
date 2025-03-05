@@ -18,12 +18,10 @@ const AkrabService = {
                     "alt-svc": "h3=\":443\"; ma=86400",
                     "cache-control": "no-store, no-cache, must-revalidate",
                     "cf-cache-status": "DYNAMIC",
-                    "cf-ray": "91797af82ac79cbd-SIN",
                     "content-encoding": "zstd",
                     "content-security-policy": "upgrade-insecure-requests",
                     "content-type": "application/x-www-form-urlencoded",
-                    "date": "Tue, 25 Feb 2025 17:40:25 GMT",
-                    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+                    "Connection": "keep-alive",
                     "nel": {
                       "success_fraction": 0,
                       "report_to": "cf-nel",

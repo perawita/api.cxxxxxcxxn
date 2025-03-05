@@ -15,12 +15,21 @@ const AkrabService = {
                 key_access: keyAccess
             }), {
                 headers: {
-                  "accept": "application/json",
-                  "content-type": "application/x-www-form-urlencoded",
-                  "origin": `${config.origin}`,
-                  "referer": `${url}`,
-                  "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36"
-              }
+                    "alt-svc": "h3=\":443\"; ma=86400",
+                    "cache-control": "no-store, no-cache, must-revalidate",
+                    "cf-cache-status": "DYNAMIC",
+                    "content-encoding": "zstd",
+                    "content-security-policy": "upgrade-insecure-requests",
+                    "content-type": "application/x-www-form-urlencoded",
+                    "Connection": "keep-alive",
+                    "panel": "hpanel",
+                    "platform": "hostinger",
+                    "pragma": "no-cache",
+                    "priority": "u=0,i",
+                    "vary": "Accept-Encoding",
+                    "x-powered-by": "PHP/8.2.27",
+                    "x-turbo-charged-by": "LiteSpeed"
+                  }
                   
                 
             });

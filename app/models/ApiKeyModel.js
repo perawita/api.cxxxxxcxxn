@@ -16,7 +16,7 @@ const ApiKeyModel = {
                 if (err) return callback(err, null);
                 const result = results.length > 0 ? results[0] : null;
                 if (result) {
-                    redis.setex(redisKey, 3600, JSON.stringify(result)); // Cache selama 1 jam
+                    redis.setex(redisKey, 600, JSON.stringify(result));
                 }
                 callback(null, result);
             });
@@ -28,7 +28,7 @@ const ApiKeyModel = {
         db.query(sql, [userId, apiKey], (err, result) => {
             if (err) return callback(err, null);
             const newKey = { id: result.insertId, user_id: userId, api_key: apiKey };
-            redis.setex(`api_key:${apiKey}`, 3600, JSON.stringify(newKey)); // Cache key baru
+            redis.setex(`api_key:${apiKey}`, 600, JSON.stringify(newKey)); // Cache key baru
             callback(null, newKey);
         });
     },
@@ -60,7 +60,7 @@ const ApiKeyModel = {
             const sql = 'SELECT * FROM api_keys WHERE user_id = ?';
             db.query(sql, [userId], (err, results) => {
                 if (err) return callback(err, null);
-                redis.setex(redisKey, 3600, JSON.stringify(results)); // Cache hasil selama 1 jam
+                redis.setex(redisKey, 600, JSON.stringify(results));
                 callback(null, results);
             });
         });

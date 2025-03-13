@@ -3,7 +3,7 @@ const axios = require('axios');
 const qs = require('qs'); 
 
 const AkrabService = {
-    purchase: async (keyAccess, userId, product_id, customer_no) => {
+    purchase: async (keyAccess, userId, product_id, customer_no, customer_name, admin_name) => {
         try {
             const url = `${config.backend}/akrab-otomatis.php`;
 
@@ -12,7 +12,9 @@ const AkrabService = {
                 user_id: userId,
                 customer_no: customer_no,
                 product_id: product_id,
-                key_access: keyAccess
+                key_access: keyAccess,
+                customer_name : customer_name,
+                admin_name: admin_name
             }), {
                 headers: {
                   "cache-control": "no-store, no-cache, must-revalidate",

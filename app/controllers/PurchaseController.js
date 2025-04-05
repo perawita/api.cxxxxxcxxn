@@ -30,10 +30,10 @@ const PurchaseController = {
                 return res.status(404).json({ status: false, message: 'Product is not found' });
             }
 
-            // if (productData.sisa_slot <= 0) {
-            //     await redisClient.del(cacheKey);
-            //     return res.status(404).json({ status: false, message: 'Slot is not ready' });
-            // }
+            if (productData.sisa_slot <= 0) {
+                await redisClient.del(cacheKey);
+                return res.status(404).json({ status: false, message: 'Slot is not ready' });
+            }
 
             // // Proses pembelian
             // const result = await AkrabService.purchase(keyAccess, userId, productData.id_produk, customerNo, productData.nama_member, productData.nama_admin);

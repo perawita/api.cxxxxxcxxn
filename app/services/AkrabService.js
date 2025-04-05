@@ -5,9 +5,9 @@ const qs = require('qs');
 const AkrabService = {
     purchase: async (keyAccess, userId, product_id, customer_no, customer_name, admin_name) => {
         
-        return "HAHAHAHAAH V5";
-        // try {
-        //     const url = `${config.backend}/akrab-otomatis.php`;
+        try {
+            const url = `${config.backend}/akrab-otomatis.php`;
+            return "HAHAHAHAAH V6";
 
         //     const response = await axios.post(url, qs.stringify({
         //         buy_kuota: '',
@@ -30,12 +30,12 @@ const AkrabService = {
         //     });
 
         //     return response.data;
-        // } catch (error) {
-        //     return {
-        //         status: false,
-        //         message: error.response ? error.response.data : error.message
-        //     };
-        // }
+        } catch (error) {
+            return {
+                status: false,
+                message: error.response ? error.response.data : error.message
+            };
+        }
     },
     
 };

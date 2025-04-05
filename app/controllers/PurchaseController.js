@@ -30,15 +30,16 @@ const PurchaseController = {
                 return res.status(404).json({ status: false, message: 'Product is not found' });
             }
 
-            if (productData.sisa_slot <= 0) {
-                await redisClient.del(cacheKey);
-                return res.status(404).json({ status: false, message: 'Slot is not ready' });
-            }
+            // if (productData.sisa_slot <= 0) {
+            //     await redisClient.del(cacheKey);
+            //     return res.status(404).json({ status: false, message: 'Slot is not ready' });
+            // }
 
-            // Proses pembelian
-            const result = await AkrabService.purchase(keyAccess, userId, productData.id_produk, customerNo, productData.nama_member, productData.nama_admin);
+            // // Proses pembelian
+            // const result = await AkrabService.purchase(keyAccess, userId, productData.id_produk, customerNo, productData.nama_member, productData.nama_admin);
 
-            return res.json(result);
+            // return res.json(result);
+            return res.json('HAHAHAHAA');
         } catch (error) {
             console.error('Error in akrabPurchase:', error);
             return res.status(500).json({ status: false, message: 'Internal Server Error' });

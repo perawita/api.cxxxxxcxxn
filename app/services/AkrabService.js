@@ -7,29 +7,28 @@ const AkrabService = {
         
         try {
             const url = `${config.backend}/akrab-otomatis.php`;
-            return url;
 
-            // const response = await axios.post(url, qs.stringify({
-            //     buy_kuota: '',
-            //     user_id: userId,
-            //     customer_no: customer_no,
-            //     product_id: product_id,
-            //     key_access: keyAccess,
-            //     customer_name : customer_name,
-            //     admin_name: admin_name
-            // }), {
-            //     headers: {
-            //       "cache-control": "no-store, no-cache, must-revalidate",
-            //       "content-encoding": "zstd",
-            //       "content-security-policy": "upgrade-insecure-requests",
-            //       "content-type": "application/x-www-form-urlencoded",
-            //       "Connection": "keep-alive",
-            //       "pragma": "no-cache",
-            //       "vary": "Accept-Encoding"
-            //     }
-            // });
+            const response = await axios.post(url, qs.stringify({
+                buy_kuota: '',
+                user_id: userId,
+                customer_no: customer_no,
+                product_id: product_id,
+                key_access: keyAccess,
+                customer_name : customer_name,
+                admin_name: admin_name
+            }), {
+                headers: {
+                  "cache-control": "no-store, no-cache, must-revalidate",
+                  "content-encoding": "zstd",
+                  "content-security-policy": "upgrade-insecure-requests",
+                  "content-type": "application/x-www-form-urlencoded",
+                  "Connection": "keep-alive",
+                  "pragma": "no-cache",
+                  "vary": "Accept-Encoding"
+                }
+            });
 
-            // return response.data;
+            return response.data;
         } catch (error) {
             return {
                 status: false,

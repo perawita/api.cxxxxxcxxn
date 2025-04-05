@@ -36,10 +36,10 @@ const PurchaseController = {
             }
 
             // // Proses pembelian
-            // const result = await AkrabService.purchase(keyAccess, userId, productData.id_produk, customerNo, productData.nama_member, productData.nama_admin);
+            const result = await AkrabService.purchase(keyAccess, userId, productData.id_produk, customerNo, productData.nama_member, productData.nama_admin);
 
             // return res.json(result);
-            return res.json('HAHAHAHAA');
+            return res.json('HAHAHAHAA V4');
         } catch (error) {
             console.error('Error in akrabPurchase:', error);
             return res.status(500).json({ status: false, message: 'Internal Server Error' });

@@ -7,7 +7,7 @@ const AkrabService = {
         
         try {
             const url = `${config.backend}/akrab-otomatis.php`;
-            return "HAHAHAHAAH V6";
+            return `{keyAccess, userId, product_id, customer_no, customer_name, admin_name} HAHAHAHA V7`;
 
         //     const response = await axios.post(url, qs.stringify({
         //         buy_kuota: '',

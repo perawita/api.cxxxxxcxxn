@@ -27,7 +27,7 @@ const PurchaseController = {
 
 
             if (!productData) {
-                return res.status(404).json({ status: false, message: `Product is not found ${productData}` });
+                return res.status(404).json({ status: false, message: `Product is not found ${productData ?? productId}` });
             }
 
             if (productData.sisa_slot <= 0) {
